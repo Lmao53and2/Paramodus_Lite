@@ -18,6 +18,80 @@ if "tasks" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# LaTeX processing functions
+def process_latex_content(content):
+    """Convert LaTeX expressions to Streamlit-compatible format"""
+    if not content:
+        return content
+    
+    # Protect code blocks from LaTeX processing
+    code_blocks = []
+    def replace_code(match):
+        code_blocks.append(match.group(0))
+        return f"__CODE_BLOCK_{len(code_blocks)-1}__"
+    
+    # Protect inline code and code blocks
+    content = re.sub(r'``````', replace_code, content)
+    content = re.sub(r'`[^`]+`', replace_code, content)
+    
+    # Convert LaTeX delimiters to Streamlit format
+    # Display math: \[ ... \] -> $$ ... $$
+    content = re.sub(r'\\\[(.*?)\\\]', r'$$\1$$', content, flags=re.DOTALL)
+    
+    # Inline math: \( ... \) -> $ ... $
+    content = re.sub(r'\\\((.*?)\\\)', r'$\1$', content, flags=re.DOTALL)
+    
+    # Restore code blocks
+    for i, code_block in enumerate(code_blocks):
+        content = content.replace(f"__CODE_BLOCK_{i}__", code_block)
+    
+    return content
+
+def display_content_with_latex(content, font_family="Arial"):
+    """Display content with proper LaTeX rendering and font styling"""
+    if not content:
+        return
+    
+    # Process LaTeX expressions
+    processed_content = process_latex_content(content)
+    
+    # Check if content contains LaTeX expressions
+    has_latex = ('$$' in processed_content or 
+                '$' in processed_content and not processed_content.count('$') % 2)
+    
+    if has_latex:
+        # Use regular markdown for LaTeX content (Streamlit handles LaTeX in markdown)
+        st.markdown(processed_content)
+    else:
+        # Use styled HTML for regular text
+        st.markdown(
+            f"<span style='font-family:{font_family},sans-serif'>{processed_content}</span>", 
+            unsafe_allow_html=True
+        )
+
+def display_mixed_content(content, font_family="Arial"):
+    """Handle mixed content with both LaTeX and regular text"""
+    if not content:
+        return
+    
+    processed_content = process_latex_content(content)
+    
+    # Split content by LaTeX expressions and process each part
+    parts = re.split(r'(\$\$.*?\$\$|\$.*?\$)', processed_content, flags=re.DOTALL)
+    
+    for part in parts:
+        if part.strip():
+            if (part.startswith('$$') and part.endswith('$$')) or (part.startswith('$') and part.endswith('$') and not part.startswith('$$')):
+                # This is a LaTeX expression
+                st.markdown(part)
+            else:
+                # This is regular text
+                if part.strip():
+                    st.markdown(
+                        f"<span style='font-family:{font_family},sans-serif'>{part}</span>", 
+                        unsafe_allow_html=True
+                    )
+
 # Sidebar API setup
 st.sidebar.header("🔑 API Configuration")
 pplx_api_key = os.getenv("PERPLEXITY_API_KEY")
@@ -132,7 +206,7 @@ with st.sidebar:
         </style>
     """, unsafe_allow_html=True)
 
-# Agent creation
+# Agent creation with LaTeX-aware instructions
 @st.cache_resource
 def create_personality_agent(provider, model_name, api_key):
     return Agent(
@@ -141,7 +215,12 @@ def create_personality_agent(provider, model_name, api_key):
         model=create_model_instance(provider, model_name, api_key),
         add_history_to_messages=True,
         storage=load_personality_storage(),
-        instructions="Summarize the conversation and give a brief personality analysis.",
+        instructions="""
+            Summarize the conversation and give a brief personality analysis.
+            When including mathematical expressions, use proper LaTeX formatting:
+            - Use \\( and \\) for inline math
+            - Use \\[ and \\] for display math
+        """,
         markdown=True,
         stream=False,
     )
@@ -154,7 +233,12 @@ def create_task_agent(provider, model_name, api_key):
         model=create_model_instance(provider, model_name, api_key),
         add_history_to_messages=True,
         storage=load_task_storage(),
-        instructions="Extract actionable tasks. Return as list, one per line starting with '- '.",
+        instructions="""
+            Extract actionable tasks. Return as list, one per line starting with '- '.
+            When including mathematical expressions, use proper LaTeX formatting:
+            - Use \\( and \\) for inline math
+            - Use \\[ and \\] for display math
+        """,
         markdown=True,
         stream=False,
     )
@@ -171,6 +255,9 @@ def create_main_agent(provider, model_name, api_key, _personality_agent, _task_a
         instructions="""
             Talk to the user naturally and helpfully.
             Provide complete, well-formatted responses.
+            When including mathematical expressions, use proper LaTeX formatting:
+            - Use \\( expression \\) for inline math
+            - Use \\[ expression \\] for display math (block equations)
             Do not mention delegation or other agents in your response.
         """,
         markdown=True,
@@ -194,15 +281,22 @@ if current_api_key and selected_model:
 
     st.title(f"🤖 AI Learning Assistant ({provider_choice} - {selected_model})")
 
+    # Display chat history with LaTeX support
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{message['content']}</span>", unsafe_allow_html=True)
+            display_content_with_latex(
+                message['content'], 
+                st.session_state.get('selected_font', 'Arial')
+            )
 
     if prompt := st.chat_input("You:"):
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         with st.chat_message("user"):
-            st.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{prompt}</span>", unsafe_allow_html=True)
+            display_content_with_latex(
+                prompt, 
+                st.session_state.get('selected_font', 'Arial')
+            )
 
         with st.chat_message("assistant"):
             try:
@@ -210,14 +304,25 @@ if current_api_key and selected_model:
                 full_prompt = f"Context from PDF:\n{pdf_text}\n\nUser: {prompt}" if pdf_text else prompt
                 response = main_agent.run(full_prompt)
                 content = response.content if hasattr(response, "content") else str(response)
-                message_placeholder.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{content}</span>", unsafe_allow_html=True)
+                
+                with message_placeholder.container():
+                    display_content_with_latex(
+                        content, 
+                        st.session_state.get('selected_font', 'Arial')
+                    )
+                    
             except Exception as e:
                 st.error(f"Error getting response: {str(e)}")
                 content = "Sorry, I encountered an error processing your request."
-                message_placeholder.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{content}</span>", unsafe_allow_html=True)
+                with message_placeholder.container():
+                    display_content_with_latex(
+                        content, 
+                        st.session_state.get('selected_font', 'Arial')
+                    )
 
             st.session_state.messages.append({"role": "assistant", "content": content})
 
+        # Task extraction with LaTeX support
         try:
             task_response = task_agent.run(f"Extract tasks from this conversation: User said: '{prompt}'")
             task_content = task_response.content if hasattr(task_response, "content") else str(task_response)
@@ -230,12 +335,17 @@ if current_api_key and selected_model:
         except Exception as e:
             st.error(f"Error in task extraction: {str(e)}")
 
+        # Analysis sections with LaTeX support
         col1, col2 = st.columns(2)
         with col1:
             with st.expander("🧠 Personality Analysis", expanded=False):
                 try:
                     res = personality_agent.run(f"Analyze this conversation: User said: '{prompt}'")
-                    st.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{res.content if hasattr(res,'content') else str(res)}</span>", unsafe_allow_html=True)
+                    analysis_content = res.content if hasattr(res, 'content') else str(res)
+                    display_content_with_latex(
+                        analysis_content,
+                        st.session_state.get('selected_font', 'Arial')
+                    )
                 except Exception as e:
                     st.error(f"Error in personality analysis: {str(e)}")
 
@@ -243,6 +353,10 @@ if current_api_key and selected_model:
             with st.expander("📋 Latest Task Analysis", expanded=False):
                 try:
                     res = task_agent.run(f"Extract tasks from this conversation: User said: '{prompt}'")
-                    st.markdown(f"<span style='font-family:{st.session_state.get('selected_font', 'Arial')},sans-serif'>{res.content if hasattr(res,'content') else str(res)}</span>", unsafe_allow_html=True)
+                    task_analysis_content = res.content if hasattr(res, 'content') else str(res)
+                    display_content_with_latex(
+                        task_analysis_content,
+                        st.session_state.get('selected_font', 'Arial')
+                    )
                 except Exception as e:
                     st.error(f"Error in task extraction: {str(e)}")
