@@ -1,0 +1,9 @@
+openai
+agno
+python-dotenv
+requests
+streamlit
+pydf
+groq
+sqlalchemy
+sqlalchemy-utils
