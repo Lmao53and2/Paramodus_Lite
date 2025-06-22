@@ -3,7 +3,7 @@ agno
 python-dotenv
 requests
 streamlit
-pydf
+pypdf
 groq
 sqlalchemy
 sqlalchemy-utils
