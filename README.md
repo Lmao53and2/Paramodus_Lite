@@ -16,7 +16,7 @@ ProductAI is a multi-agent AI powered, general productivity assistant by Streaml
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Nc667/ProductAI_1.git
+git clone https://github.com/73IA/ProductAI_1.git
 cd ProductAI_1
 ```
 
