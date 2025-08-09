@@ -16,6 +16,13 @@ ProductAI is a multi-agent AI powered, general productivity assistant by Streaml
 * In progress, so smooth operation not guaranteed
 * Visual button bugs in font and LLM changer
 
+## FUTURE FEATURES
+* Deatches logic from streamlit = Executable possible
+* Personality Agent Adapts to inquiries as you chat
+* Limit number of tasks for better visibility
+* Customizable UI
+  
+
 ## Installation
 
 ### 1. Clone the Repository
