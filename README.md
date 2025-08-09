@@ -11,6 +11,11 @@ ProductAI is a multi-agent AI powered, general productivity assistant by Streaml
 * 💬 Interactive Streamlit chat UI with customizable fonts
 * 💾 Persistent agent memory using SQLite
 
+## CAUTION
+* Font Changer stops chat process
+* In progress, so smooth operation not guaranteed
+* Visual button bugs in font and LLM changer
+
 ## Installation
 
 ### 1. Clone the Repository
