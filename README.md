@@ -1,93 +1,104 @@
+Here’s a polished GitHub-style **README** for your **Paragomus Lite** project, designed to be clear, concise, and developer-friendly—complete with instructions for macOS, Ubuntu, and Windows, and using the `uv` tool for Python projects as requested:
+
+````
 # Paragomus Lite
 
-Paragomus Lite is a multi-agent AI powered, general productivity assistant by Streamlit and the Agno framework, designed to facilitate learning, task extraction, and personality analysis through conversational interaction. It supports context ingestion from uploaded PDFs and integrates with leading LLM providers including Perplexity, Groq, and OpenAI.
+A multi-agent, AI-powered productivity assistant built with Streamlit and the Agno framework. It enables learning, task extraction, and personality profiling through interactive conversation. Paragomus Lite supports PDF ingestion for context and integrates with Perplexity, Groq, and OpenAI.
+
+---
 
 ## Features
 
-* 🔄 Multi-provider LLM support (Perplexity, Groq, OpenAI)
-* 📄 PDF ingestion for contextual grounding
-* 🧠 Personality profiling agent
-* 📋 Automated and manual task extraction and tracking
-* 💬 Interactive Streamlit chat UI with customizable fonts
-* 💾 Persistent agent memory using SQLite
+- Integration with multiple LLM providers: Perplexity, Groq, OpenAI  
+- Context input by uploading PDFs  
+- Personality analysis agent  
+- Automated and manual task extraction and tracking  
+- Streamlit-powered chat UI with customizable fonts  
+- Persistent memory using SQLite databases  
 
-## CAUTION
-* Font Changer stops chat process
-* In progress, so smooth operation not guaranteed
-* Visual button bugs in font and LLM changer
+> **Caution:**  
+> - Font changer may interrupt chat flow  
+> - In-progress UI elements (fonts, LLM changer) may exhibit visual bugs  
 
-## FUTURE FEATURES
-* Detaching logic from streamlit = Installable Program Possible
-* Personality Agent Adapts to inquiries as you chat
-* Limit number of tasks for better visibility
-* Customizable UI
-  
+---
+
+## Roadmap (Future Features)
+
+- Decouple logic from Streamlit to deliver an installable version  
+- Make personality agent adapt dynamically during conversations  
+- Limit visible tasks for better clarity  
+- Add advanced UI customization options  
+
+---
 
 ## Installation
 
-### 1. Clone the Repository
-
+### Clone the Repository
 ```bash
-git clone https://github.com/73IA/ProductAI_1.git
-cd ProductAI_1
-```
+git clone https://github.com/Lmao53and2/Paragomus_Lite.git
+cd Paragomus_Lite
+````
 
-### 2. Set Up Environment Variables
+### Set Up Environment Variables
 
-Create a `.env` file with your API keys:
+Create a `.env` file in the project root:
 
 ```env
 PERPLEXITY_API_KEY=your-perplexity-api-key
 GROQ_API_KEY=your-groq-api-key
 OPENAI_API_KEY=your-openai-api-key
-```
 
-Optional overrides for SQLite file paths:
-
-```env
+# Optional: Customize SQLite storage paths
 AGENT_STORAGE_PATH=business_agent.db
 PERSONALITY_STORAGE_PATH=personality_data.db
 TASK_STORAGE_PATH=task_data.db
 ```
 
-### 3. Install Dependencies
-
-This project uses [uv](https://docs.astral.sh/uv/) for Python dependency management:
+### Install Dependencies
 
 ```bash
 uv sync
 ```
 
-## Running the Application
+### Run the App
 
-Start the Streamlit app:
+With `uv` (recommended):
 
 ```bash
 uv run app.py
 ```
 
-Or directly:
+Alternatively, directly using Streamlit:
 
 ```bash
 streamlit run app.py
 ```
 
-## Usage
+---
 
-1. Configure your API provider and select a model via the sidebar.
-2. Upload a PDF file to use its contents as conversation context.
-3. Start chatting in the input box below the messages.
-4. View personality and task analysis from conversation in expandable sections.
-5. Add or manage tasks in the sidebar.
+## Usage Guide
+
+1. Select your preferred API provider and model via the sidebar.
+2. Upload a PDF to provide context for the conversation.
+3. Type your message in the chat input field.
+4. View task and personality analysis in expandable sections.
+5. Use the sidebar to add or manage tasks.
+
+---
 
 ## Platform Notes
 
-| OS      | Command Line Tools Required      |
-| ------- | -------------------------------- |
-| macOS   | git, Python 3, uv                |
-| Ubuntu  | git, python3, uv                 |
-| Windows | git, python, uv (via PowerShell) |
+Ensure you have `git`, Python 3, and `uv` installed before proceeding:
+
+* **macOS:** Requires `git`, Python 3, and `uv`
+* **Ubuntu:** Requires `git`, `python3`, and `uv`
+* **Windows (PowerShell):** Requires `git`, Python (3.x), and `uv`
+
+---
 
 ## License
 
-MIT
+Licensed under the MIT License.
+
+
+
