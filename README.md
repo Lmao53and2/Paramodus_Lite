@@ -1,6 +1,6 @@
-# ProductAI
+# Paragomus Lite
 
-ProductAI is a multi-agent AI powered, general productivity assistant by Streamlit and the Agno framework, designed to facilitate learning, task extraction, and personality analysis through conversational interaction. It supports context ingestion from uploaded PDFs and integrates with leading LLM providers including Perplexity, Groq, and OpenAI.
+Paragomus Lite is a multi-agent AI powered, general productivity assistant by Streamlit and the Agno framework, designed to facilitate learning, task extraction, and personality analysis through conversational interaction. It supports context ingestion from uploaded PDFs and integrates with leading LLM providers including Perplexity, Groq, and OpenAI.
 
 ## Features
 
