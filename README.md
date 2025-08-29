@@ -1,6 +1,4 @@
-Here’s a polished GitHub-style **README** for your **Paragomus Lite** project, designed to be clear, concise, and developer-friendly—complete with instructions for macOS, Ubuntu, and Windows, and using the `uv` tool for Python projects as requested:
 
-````
 # Paragomus Lite
 
 A multi-agent, AI-powered productivity assistant built with Streamlit and the Agno framework. It enables learning, task extraction, and personality profiling through interactive conversation. Paragomus Lite supports PDF ingestion for context and integrates with Perplexity, Groq, and OpenAI.
