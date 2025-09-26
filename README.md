@@ -33,8 +33,8 @@ A multi-agent, AI-powered productivity assistant built with Streamlit and the Ag
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/Lmao53and2/Paragomus_Lite.git
-cd Paragomus_Lite
+git clone https://github.com/Lmao53and2/Paramodus_Lite.git
+cd Paramodus_Lite
 ````
 
 ### Set Up Environment Variables
