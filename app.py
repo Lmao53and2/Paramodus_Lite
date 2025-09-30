@@ -214,7 +214,7 @@ def create_personality_agent(provider, model_name, api_key):
         role="Summarize the conversation and identify the user's personality traits.",
         model=create_model_instance(provider, model_name, api_key),
         add_history_to_messages=True,
-        storage=load_personality_storage(),
+        db=load_personality_storage(),
         instructions="""
             Summarize the conversation and give a brief personality analysis.
             When including mathematical expressions, use proper LaTeX formatting:
@@ -232,7 +232,7 @@ def create_task_agent(provider, model_name, api_key):
         role="Extract tasks from the conversation.",
         model=create_model_instance(provider, model_name, api_key),
         add_history_to_messages=True,
-        storage=load_task_storage(),
+        db=load_task_storage(),
         instructions="""
             Extract actionable tasks. Return as list, one per line starting with '- '.
             When including mathematical expressions, use proper LaTeX formatting:
@@ -250,7 +250,7 @@ def create_main_agent(provider, model_name, api_key, _personality_agent, _task_a
         role="Talk to the user and delegate to other agents.",
         model=create_model_instance(provider, model_name, api_key),
         add_history_to_messages=True,
-        storage=load_session_storage(),
+        db=load_session_storage(),
         team=[_personality_agent, _task_agent],
         instructions="""
             Talk to the user naturally and helpfully.
