@@ -4,7 +4,7 @@ from agno.models.perplexity import Perplexity
 from agno.models.groq import Groq
 from agno.models.openai import OpenAIChat
 from load_storage import load_session_storage, load_personality_storage, load_task_storage
-from agno.document.reader.pdf_reader import PDFReader
+from agno.knowledge.reader.pdf_reader import PDFReader
 from dotenv import load_dotenv
 import os
 import re
