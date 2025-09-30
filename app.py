@@ -206,14 +206,11 @@ with st.sidebar:
         </style>
     """, unsafe_allow_html=True)
 
-# Agent creation with LaTeX-aware instructions
+# Agent creation with LaTeX-aware instructions - simplified for Agno v2.0
 @st.cache_resource
 def create_personality_agent(provider, model_name, api_key):
     return Agent(
-        name="Personality Agent",
-        role="Summarize the conversation and identify the user's personality traits.",
         model=create_model_instance(provider, model_name, api_key),
-        add_history_to_messages=True,
         db=load_personality_storage(),
         instructions="""
             Summarize the conversation and give a brief personality analysis.
@@ -222,16 +219,12 @@ def create_personality_agent(provider, model_name, api_key):
             - Use \\[ and \\] for display math
         """,
         markdown=True,
-        stream=False,
     )
 
 @st.cache_resource
 def create_task_agent(provider, model_name, api_key):
     return Agent(
-        name="Task Agent",
-        role="Extract tasks from the conversation.",
         model=create_model_instance(provider, model_name, api_key),
-        add_history_to_messages=True,
         db=load_task_storage(),
         instructions="""
             Extract actionable tasks. Return as list, one per line starting with '- '.
@@ -240,16 +233,12 @@ def create_task_agent(provider, model_name, api_key):
             - Use \\[ and \\] for display math
         """,
         markdown=True,
-        stream=False,
     )
 
 @st.cache_resource
 def create_main_agent(provider, model_name, api_key, _personality_agent, _task_agent):
     return Agent(
-        name="Main Agent",
-        role="Talk to the user and delegate to other agents.",
         model=create_model_instance(provider, model_name, api_key),
-        add_history_to_messages=True,
         db=load_session_storage(),
         team=[_personality_agent, _task_agent],
         instructions="""
@@ -261,7 +250,6 @@ def create_main_agent(provider, model_name, api_key, _personality_agent, _task_a
             Do not mention delegation or other agents in your response.
         """,
         markdown=True,
-        stream=False,
     )
 
 def parse_tasks_from_response(response_text):
