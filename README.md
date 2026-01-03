@@ -1,102 +1,65 @@
+# Paramodus Lite
 
-# Paragomus Lite
-
-A multi-agent, AI-powered productivity assistant built with Streamlit and the Agno framework. It enables learning, task extraction, and personality profiling through interactive conversation. Paragomus Lite supports PDF ingestion for context and integrates with Perplexity, Groq, and OpenAI.
-
----
-
-## Features
-
-- Integration with multiple LLM providers: Perplexity, Groq, OpenAI  
-- Context input by uploading PDFs  
-- Personality analysis agent  
-- Automated and manual task extraction and tracking  
-- Streamlit-powered chat UI with customizable fonts  
-- Persistent memory using SQLite databases  
-
-> **Caution:**  
-> - Font changer may interrupt chat flow  
-> - In-progress UI elements (fonts, LLM changer) may exhibit visual bugs  
+A high-performance, multi-agent AI productivity assistant built with **Agno v2.0** and **Streamlit**. Designed for learning, task extraction, and context-aware research.
 
 ---
 
-## Roadmap (Future Features)
+## 🚀 Features
 
-- Decouple logic from Streamlit to deliver an installable version  
-- Make personality agent adapt dynamically during conversations  
-- Limit visible tasks for better clarity  
-- Add advanced UI customization options  
+- **Multi-Provider Support**: Switch between **OpenAI**, **Groq**, and **Perplexity** seamlessly.
+- **Contextual PDF Ingestion**: Upload documents to give the AI project-specific knowledge.
+- **Agentic Task Extraction**: Automatically identifies actionable items from your conversation.
+- **Personality Profiling**: Analyzes interaction patterns for personalized assistance.
+- **Persistent Memory**: SQLite-backed storage for long-term project tracking.
+- **Math Ready**: Full support for LaTeX rendering ($inline$ and $$block$$).
 
 ---
 
-## Installation
+## 🛠️ Installation
 
-### Clone the Repository
+### 1. Clone & Setup
 ```bash
 git clone https://github.com/Lmao53and2/Paramodus_Lite.git
 cd Paramodus_Lite
-````
-
-### Set Up Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-PERPLEXITY_API_KEY=your-perplexity-api-key
-GROQ_API_KEY=your-groq-api-key
-OPENAI_API_KEY=your-openai-api-key
-
-# Optional: Customize SQLite storage paths
-AGENT_STORAGE_PATH=business_agent.db
-PERSONALITY_STORAGE_PATH=personality_data.db
-TASK_STORAGE_PATH=task_data.db
 ```
 
-### Install Dependencies
-
+### 2. Configure Environment
+Create a `.env` file from the example:
 ```bash
-uv sync
+cp .env.example .env
 ```
+Edit `.env` with your API keys:
+- [OpenAI Dashboard](https://platform.openai.com/)
+- [Groq Console](https://console.groq.com/)
+- [Perplexity API](https://www.perplexity.ai/settings/api)
 
-### Run the App
-
-With `uv` (recommended):
-
+### 3. Install Dependencies
 ```bash
-uv run app.py
+pip install -r requirements.txt
 ```
 
-Alternatively, directly using Streamlit:
-
+### 4. Run Application
 ```bash
 streamlit run app.py
 ```
 
 ---
 
-## Usage Guide
+## 📁 Project Structure
 
-1. Select your preferred API provider and model via the sidebar.
-2. Upload a PDF to provide context for the conversation.
-3. Type your message in the chat input field.
-4. View task and personality analysis in expandable sections.
-5. Use the sidebar to add or manage tasks.
-
----
-
-## Platform Notes
-
-Ensure you have `git`, Python 3, and `uv` installed before proceeding:
-
-* **macOS:** Requires `git`, Python 3, and `uv`
-* **Ubuntu:** Requires `git`, `python3`, and `uv`
-* **Windows (PowerShell):** Requires `git`, Python (3.x), and `uv`
+- `app.py`: Main Streamlit interface and Agent orchestration.
+- `load_storage.py`: SQLite storage configurations for persistent memory.
+- `.env.example`: Template for required API keys.
+- `requirements.txt`: Pinned production dependencies.
 
 ---
 
-## License
+## ⚠️ Notes
+- Ensure your `.env` file is never committed (checked by `.gitignore`).
+- SQLite databases (`*.db`) are stored locally in the project root.
+- PDF uploads use temporary processing to ensure privacy and performance.
 
-Licensed under the MIT License.
+---
 
-
-
+## 📜 License
+MIT License - See [LICENSE](LICENSE) for details.

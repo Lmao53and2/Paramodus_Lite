@@ -1,9 +1,8 @@
-openai
-agno
-python-dotenv
-requests
-streamlit
-pypdf
-groq
-sqlalchemy
-sqlalchemy-utils
+streamlit>=1.30.0
+agno>=2.0.0
+python-dotenv>=1.0.1
+openai>=1.12.0
+groq>=0.4.2
+pypdf>=4.0.1
+requests>=2.31.0
+sqlalchemy>=2.0.0
